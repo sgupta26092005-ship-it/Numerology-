@@ -9,16 +9,16 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: #f2f3f7;
+      background: linear-gradient(180deg, #eaeafc, #f9f9ff);
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial;
     }
 
     .phone {
       width: 360px;
-      height: 640px;
+      height: 680px;
       background: #ffffff;
       border-radius: 30px;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+      box-shadow: 0 25px 60px rgba(0,0,0,0.25);
       overflow: hidden;
       display: flex;
       flex-direction: column;
@@ -26,33 +26,43 @@
 
     .header {
       background: linear-gradient(135deg, #667eea, #764ba2);
-      padding: 25px;
+      padding: 22px;
       color: white;
       text-align: center;
-      font-size: 20px;
+      font-size: 22px;
       font-weight: bold;
+      letter-spacing: 0.5px;
     }
 
     .content {
       flex: 1;
-      padding: 30px 25px;
+      padding: 28px 22px;
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      align-items: center;
     }
 
     input {
+      width: 100%;
       padding: 14px;
       font-size: 16px;
-      border-radius: 12px;
+      border-radius: 14px;
       border: 1px solid #ccc;
       outline: none;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
+      text-align: center;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 10px;
+      width: 100%;
     }
 
     button {
+      flex: 1;
       padding: 14px;
-      font-size: 16px;
+      font-size: 15px;
       border-radius: 14px;
       border: none;
       background: linear-gradient(135deg, #667eea, #764ba2);
@@ -61,45 +71,72 @@
       cursor: pointer;
     }
 
+    .secondary {
+      background: #ececff;
+      color: #5a5a8a;
+    }
+
     button:active {
-      transform: scale(0.98);
+      transform: scale(0.97);
     }
 
     .result {
-      margin-top: 30px;
-      text-align: center;
-      font-size: 32px;
+      margin-top: 20px;
+      font-size: 28px;
       font-weight: bold;
       color: #333;
+      text-align: center;
     }
 
     .label {
-      text-align: center;
-      margin-top: 10px;
-      font-size: 14px;
+      font-size: 13px;
       color: #777;
+      margin-top: 6px;
+    }
+
+    .chakra {
+      margin-top: 20px;
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+      box-shadow: 0 0 30px rgba(0,0,0,0.2);
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 0.8; }
+      50% { transform: scale(1.08); opacity: 1; }
+      100% { transform: scale(1); opacity: 0.8; }
     }
 
     .footer {
-      padding: 15px;
+      padding: 14px;
       text-align: center;
       font-size: 12px;
       color: #999;
     }
   </style></head>
 <body>  <div class="phone">
-    <div class="header">Name Number App</div><div class="content">
+    <div class="header">Chakra Frequency App</div><div class="content">
   <input type="text" id="name" placeholder="Enter your name" />
-  <button onclick="calculate()">Calculate</button>
+
+  <div class="btn-group">
+    <button onclick="calculate()">Calculate</button>
+    <button class="secondary" onclick="resetApp()">Reset</button>
+  </div>
 
   <div class="result" id="result">—</div>
   <div class="label">Pythagorean Total</div>
 
-  <div class="result" id="freqResult" style="font-size:26px; margin-top:20px;">—</div>
+  <div class="result" id="freqResult" style="font-size:24px;">—</div>
   <div class="label">Frequency Total</div>
+
+  <div class="chakra" id="chakraCircle" style="background:#ccc; display:none"></div>
+  <div class="result" id="chakraResult" style="font-size:20px;">—</div>
+  <div class="label">Chakra</div>
 </div>
 
-<div class="footer">Pythagorean System</div>
+<div class="footer">Numerology • Frequency • Chakra</div>
 
   </div>  <script>
     function calculate() {
@@ -134,6 +171,36 @@
 
       document.getElementById('result').innerText = total || '—';
       document.getElementById('freqResult').innerText = freqTotal ? freqTotal.toFixed(2) : '—';
+
+      showChakra(freqTotal);
+    }
+
+    function showChakra(freq) {
+      const circle = document.getElementById('chakraCircle');
+      const text = document.getElementById('chakraResult');
+
+      let chakra = '—';
+      let color = '#ccc';
+
+      if (freq >= 432 && freq < 480) { chakra = 'Root Chakra'; color = '#e53935'; }
+      else if (freq >= 480 && freq < 528) { chakra = 'Sacral Chakra'; color = '#fb8c00'; }
+      else if (freq >= 528 && freq < 594) { chakra = 'Solar Plexus Chakra'; color = '#fdd835'; }
+      else if (freq >= 594 && freq < 672) { chakra = 'Heart Chakra'; color = '#43a047'; }
+      else if (freq >= 672 && freq < 720) { chakra = 'Throat Chakra'; color = '#1e88e5'; }
+      else if (freq >= 720 && freq < 768) { chakra = 'Third Eye Chakra'; color = '#6a1b9a'; }
+      else if (freq >= 768) { chakra = 'Crown Chakra'; color = '#b388ff'; }
+
+      circle.style.display = 'block';
+      circle.style.background = color;
+      text.innerText = chakra;
+    }
+
+    function resetApp() {
+      document.getElementById('name').value = '';
+      document.getElementById('result').innerText = '—';
+      document.getElementById('freqResult').innerText = '—';
+      document.getElementById('chakraResult').innerText = '—';
+      document.getElementById('chakraCircle').style.display = 'none';
     }
   </script></body>
 </html>

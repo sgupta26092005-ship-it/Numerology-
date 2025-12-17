@@ -172,25 +172,24 @@
       document.getElementById('result').innerText = total || '—';
       document.getElementById('freqResult').innerText = freqTotal ? freqTotal.toFixed(2) : '—';
 
-      // SCALE frequency so it fits chakra ranges
-      const scaledFreq = freqTotal * 4;
-      showChakra(scaledFreq);
-
-      
+      // Use RAW frequency for chakra detection (no scaling)
+      showChakra(freqTotal);
     }
 
     function showChakra(freq) {
       const text = document.getElementById('chakraResult');
 
-      let chakra = 'Below Root Chakra';
+      // Direct check for EVERY possible number (no scaling)
+      let chakra;
 
-      if (freq >= 432 && freq < 480) chakra = 'Root Chakra';
+      if (freq < 432) chakra = 'Below Root Chakra';
+      else if (freq >= 432 && freq < 480) chakra = 'Root Chakra';
       else if (freq >= 480 && freq < 528) chakra = 'Sacral Chakra';
       else if (freq >= 528 && freq < 594) chakra = 'Solar Plexus Chakra';
       else if (freq >= 594 && freq < 672) chakra = 'Heart Chakra';
       else if (freq >= 672 && freq < 720) chakra = 'Throat Chakra';
       else if (freq >= 720 && freq < 768) chakra = 'Third Eye Chakra';
-      else if (freq >= 768) chakra = 'Crown Chakra';
+      else chakra = 'Crown Chakra';
 
       text.innerText = chakra;
     }
@@ -203,5 +202,5 @@
       
     }
   </script></body>
-                                                    </html>
+      </html>                                              </html>
 

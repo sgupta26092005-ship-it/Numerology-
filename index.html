@@ -131,7 +131,7 @@
   <div class="result" id="freqResult" style="font-size:24px;">—</div>
   <div class="label">Frequency Total</div>
 
-  <div class="chakra" id="chakraCircle" style="background:#ccc; display:none"></div>
+  
   <div class="result" id="chakraResult" style="font-size:22px; margin-top:12px; font-weight:bold;">—</div>
   <div class="label">Detected Chakra</div>
 </div>
@@ -176,9 +176,6 @@
     }
 
     function showChakra(freq) {
-      const circle = document.getElementById('chakraCircle');
-      const text = document.getElementById('chakraResult');
-
       let chakra = '—';
       let color = '#ccc';
 
@@ -190,8 +187,7 @@
       else if (freq >= 720 && freq < 768) { chakra = 'Third Eye Chakra'; color = '#6a1b9a'; }
       else if (freq >= 768) { chakra = 'Crown Chakra'; color = '#b388ff'; }
 
-      circle.style.display = 'block';
-      circle.style.background = color;
+      
       text.innerText = chakra;
     }
 
@@ -200,7 +196,7 @@
       document.getElementById('result').innerText = '—';
       document.getElementById('freqResult').innerText = '—';
       document.getElementById('chakraResult').innerText = '—';
-      document.getElementById('chakraCircle').style.display = 'none';
+      
     }
   </script></body>
 </html>

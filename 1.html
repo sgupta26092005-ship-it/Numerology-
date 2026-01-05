@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chakra Frequency App</title>
+
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(180deg, #eaeafc, #f9f9ff);
+      font-family: Arial, sans-serif;
+    }
+
+    .phone {
+      width: 360px;
+      height: 720px;
+      background: #fff;
+      border-radius: 30px;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.25);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      padding: 22px;
+      color: white;
+      text-align: center;
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .content {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      text-align: center;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      font-size: 16px;
+      border-radius: 14px;
+      border: 1px solid #ccc;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    button {
+      width: 48%;
+      padding: 14px;
+      font-size: 15px;
+      border-radius: 14px;
+      border: none;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .secondary {
+      background: #ececff;
+      color: #555;
+    }
+
+    .btn-group {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 18px;
+    }
+
+    .result {
+      font-size: 22px;
+      font-weight: bold;
+      margin-top: 14px;
+    }
+
+    .label {
+      font-size: 12px;
+      color: #777;
+    }
+
+    .box {
+      margin-top: 14px;
+      padding: 10px;
+      background: #f4f4ff;
+      border-radius: 12px;
+      font-size: 14px;
+      text-align: left;
+    }
+
+    .footer {
+      padding: 10px;
+      font-size: 12px;
+      text-align: center;
+      color: #999;
+    }
+  </style>
+</head>
+
+<body>
+<div class="phone">
+  <div class="header">Chakra Frequency App</div>
+
+  <div class="content">
+    <input type="text" id="name" placeholder="Enter your name" />
+
+    <div class="btn-group">
+      <button onclick="calculate()">Calculate</button>
+      <button class="secondary" onclick="resetApp()">Reset</button>
+    </div>
+
+    <div class="result" id="result">—</div>
+    <div class="label">Pythagorean Total</div>
+
+    <div class="result" id="freqResult">—</div>
+    <div class="label">Frequency Total</div>
+
+    <div class="result" id="chakraResult">—</div>
+    <div class="label">Detected Chakra</div>
+
+    <div class="result" style="font-size:18px;">Sequential Matches</div>
+    <div id="sequenceResult" class="box">—</div>
+  </div>
+
+  <div class="footer">Numerology • Frequency • Chakra</div>
+</div>
+
+<script>
+const map = {
+  A:1,J:1,S:1,
+  B:2,K:2,T:2,
+  C:3,L:3,U:3,
+  D:4,M:4,V:4,
+  E:5,N:5,W:5,
+  F:6,O:6,X:6,
+  G:7,P:7,Y:7,
+  H:8,Q:8,Z:8,
+  I:9,R:9
+};
+
+const freq = {
+  A:43.31,B:10.56,C:23.13,D:17.25,E:56.88,
+  F:9.24,G:12.59,H:15.31,I:38.45,J:1,
+  K:5.61,L:27.98,M:15.36,N:33.92,O:36.51,
+  P:16.14,Q:0.19,R:38.64,S:29.23,T:35.43,
+  U:18.51,V:5.13,W:6.57,X:1.48,Y:9.06,Z:1.39
+};
+
+const connectionMeanings = {
+  "17/71": "सरकारी नौकरी, नेतृत्व क्षमता, घर का आराम कम",
+  "18/81": "पिता/बच्चों से मतभेद, कोर्ट केस",
+  "19/91": "स्वतंत्र कार्य, अनर्जित धन, अच्छी शिक्षा",
+  "23/32": "विरोध के बावजूद जीत",
+  "224/42": "मूडी स्वभाव, नकारात्मक सोच",
+  "25/52": "गुप्त विद्या, संगीत प्रेम",
+  "226/62": "अच्छी संवाद क्षमता, पारिवारिक समस्या",
+  "28/82": "अच्छी कमाई, साझेदारी हानिकारक",
+  "29/92": "स्वयं कमाने वाला, आर्थिक रूप से मजबूत",
+  "34/43": "बीपी/श्वास समस्या",
+  "35/53": "बुद्धिमान, प्रसिद्धि",
+  "36/63": "आत्म-सम्मान, धार्मिक",
+  "37/73": "शीर्ष पद, आर्थिक सहयोग",
+  "38/83": "संघर्षपूर्ण जीवन",
+  "39/93": "अच्छे वक्ता, समाज सेवा",
+  "45/54": "योजना कमजोर, काम में फंसे",
+  "46/64": "संबंध समस्या",
+  "47/74": "मजबूत निर्णय शक्ति",
+  "48/84": "कानूनी समस्या, अवसाद",
+  "49/94": "जोखिम लेकर सफलता",
+  "56/65": "शर्मीला, प्रेम असफल",
+  "57/75": "अच्छे वक्ता, व्यवसायी",
+  "58/85": "अच्छी कमाई लेकिन हानि",
+  "59/95": "सफल व्यवसायी",
+  "67/76": "वैवाहिक विवाद",
+  "68/86": "स्वास्थ्य/चिकित्सा क्षेत्र",
+  "69/96": "रचनात्मक, इवेंट प्लानर",
+  "78/87": "अकेलापन",
+  "79/97": "करियर उतार-चढ़ाव",
+  "89/98": "आक्रामक, शेयर मार्केट",
+  "12": "शिक्षित, पैसा बचाने वाला",
+  "21": "संवेदनशील, फिजूल खर्च",
+  "13": "भाग्य कमजोर, व्यावहारिक",
+  "31": "सरकारी नौकरी सफलता",
+  "14/41": "गुप्त शत्रु",
+  "15/51": "पिता का सहयोग",
+  "16/61": "धन हानि, नौकरी परिवर्तन"
+};
+
+function calculate() {
+  const name = document.getElementById("name").value.toUpperCase();
+  let total = 0;
+  let freqTotal = 0;
+
+  for (let ch of name) {
+    if (map[ch]) total += map[ch];
+    if (freq[ch]) freqTotal += freq[ch];
+  }
+
+  document.getElementById("result").innerText = total || "—";
+  document.getElementById("freqResult").innerText = freqTotal ? freqTotal.toFixed(2) : "—";
+
+  showChakra(freqTotal);
+  checkSequential(name);
+}
+
+function showChakra(freq) {
+  let chakra = "Below Root Chakra";
+  if (freq >= 432 && freq < 480) chakra = "Root Chakra";
+  else if (freq < 528) chakra = "Sacral Chakra";
+  else if (freq < 594) chakra = "Solar Plexus Chakra";
+  else if (freq < 672) chakra = "Heart Chakra";
+  else if (freq < 720) chakra = "Throat Chakra";
+  else if (freq < 768) chakra = "Third Eye Chakra";
+  else chakra = "Crown Chakra";
+
+  document.getElementById("chakraResult").innerText = chakra;
+}
+
+function checkSequential(name) {
+  let output = "";
+
+  for (let i = 0; i < name.length - 1; i++) {
+    let a = name[i];
+    let b = name[i + 1];
+    if (!map[a] || !map[b]) continue;
+
+    let pair = map[a] + "" + map[b];
+    let rev = map[b] + "" + map[a];
+
+    let key = connectionMeanings[pair + "/" + rev]
+      ? pair + "/" + rev
+      : connectionMeanings[rev + "/" + pair]
+      ? rev + "/" + pair
+      : null;
+
+    output += `<b>${a}${b}</b> → ${pair} → ${
+      key ? connectionMeanings[key] : "No match"
+    }<br>`;
+  }
+
+  document.getElementById("sequenceResult").innerHTML = output || "—";
+}
+
+function resetApp() {
+  document.getElementById("name").value = "";
+  document.getElementById("result").innerText = "—";
+  document.getElementById("freqResult").innerText = "—";
+  document.getElementById("chakraResult").innerText = "—";
+  document.getElementById("sequenceResult").innerText = "—";
+}
+</script>
+</body>
+</html>

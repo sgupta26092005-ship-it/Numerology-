@@ -214,12 +214,12 @@ function calculate() {
 function showChakra(freq) {
   let chakra = "Below Root Chakra";
   if (freq >= 432 && freq < 480) chakra = "Root Chakra";
-  else if (freq < 528) chakra = "Sacral Chakra";
-  else if (freq < 594) chakra = "Solar Plexus Chakra";
-  else if (freq < 672) chakra = "Heart Chakra";
-  else if (freq < 720) chakra = "Throat Chakra";
-  else if (freq < 768) chakra = "Third Eye Chakra";
-  else chakra = "Crown Chakra";
+  else if (freq >= 480 && freq < 528) chakra = "Sacral Chakra";
+  else if (freq >= 528 && freq < 594) chakra = "Solar Plexus Chakra";
+  else if (freq >= 594 && freq < 672) chakra = "Heart Chakra";
+  else if (freq >= 672 && freq < 720) chakra = "Throat Chakra";
+  else if (freq >= 720 && freq < 768) chakra = "Third Eye Chakra";
+  else if (freq >= 768) chakra = "Crown Chakra";
 
   document.getElementById("chakraResult").innerText = chakra;
 }
@@ -259,3 +259,4 @@ function resetApp() {
 </script>
 </body>
 </html>
+
